@@ -251,8 +251,17 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	//LOWORD(wp)
 }
 
-//メニュー用のプロシージャ
-
+/*
+//メニュー用のプロしーじゃ
+BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
+{
+	switch (msg)
+	{
+		SendMessage(GetDlgItem(hDlg, ID_MENU_SAVE), CB_GETCURSEL, 情報A, 情報B)
+	}
+	return FALSE;
+}
+*/
 
 void Stage::Table_Reset()
 {

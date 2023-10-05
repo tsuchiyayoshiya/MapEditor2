@@ -27,6 +27,7 @@ class Stage : public GameObject
 	//int table_[XSIZE][ZSIZE];
 	int mode_;//0:ã‚°‚é  1:‰º‚°‚é  2:í—Ş‚ğ•Ï‚¦‚é 
 	int select_;//í—Ş
+	int menu_; //ƒƒjƒ…[‚Ìí—Ş 0:ì¬ 1:ŠJ‚­,2:•Û‘¶
 	XMFLOAT3 keepPos;
 
 

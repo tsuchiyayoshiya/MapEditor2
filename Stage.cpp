@@ -6,7 +6,7 @@
 #include"Engine/Fbx.h"
 //コンストラクタ
 Stage::Stage(GameObject* parent)
-	: GameObject(parent, "Stage"), mode_(0), select_(0)
+	: GameObject(parent, "Stage"), mode_(0), select_(0), menu_(0)
 {
 	for (int i = 0; i < MODEL_NUM; i++)
 	{
@@ -160,9 +160,27 @@ void Stage::Update()
 								break;
 							}
 						}
-
-
-
+						switch (menu_)
+						{
+							/*
+						case 0:
+							break;
+						case1:
+							break;
+						case2:
+						 {
+								HANDLE hFile;        //ファイルのハンドル
+								hFile = CreateFile(
+									"Save",                 //ファイル名
+									GENERIC_WRITE,           //アクセスモード（書き込み用）
+									0,                      //共有（なし）
+									NULL,                   //セキュリティ属性（継承しない）
+									CREATE_ALWAYS,           //作成方法
+									FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
+									NULL);                  //拡張属性（なし）
+						 }
+						 */
+						}
 						break;
 					}
 					return;
@@ -172,6 +190,9 @@ void Stage::Update()
 			}
 		}
 	}
+	
+	
+	
 }
 
 //描画
@@ -229,6 +250,9 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	return FALSE;
 	//LOWORD(wp)
 }
+
+//メニュー用のプロシージャ
+
 
 void Stage::Table_Reset()
 {

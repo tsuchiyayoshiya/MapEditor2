@@ -224,6 +224,45 @@ void Stage::Release()
 {
 }
 
+void Stage::Save()
+{
+	char fileName[MAX_PATH] = "無題.map";
+
+	OPENFILENAME ofn;
+	ZeroMemory(&ofn, sizeof(ofn));
+	ofn.lStructSize = sizeof(OPENFILENAME);
+	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")
+		TEXT("すべてのファイル(*.*)\0*.*\0\0");
+	ofn.lpstrFile = fileName;
+	ofn.nMaxFile = MAX_PATH;
+	ofn.Flags = OFN_OVERWRITEPROMPT;
+	ofn.lpstrDefExt = "map";
+
+	//ファイルを保存　ダイアログ
+	BOOL selFile;
+	selFile = GetSaveFileName(&ofn);
+
+	//キャンセルしたら中断
+	if (selFile == FALSE) return;
+
+	HANDLE hFile;        //ファイルのハンドル
+	hFile = CreateFile(
+		"dataFile.txt",                 //ファイル名
+		GENERIC_WRITE,           //アクセスモード（書き込み用）
+		0,                      //共有（なし）
+		NULL,                   //セキュリティ属性（継承しない）
+		CREATE_ALWAYS,           //作成方法
+		FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
+		NULL);                  //拡張属性（なし）
+	//失敗したとき
+	if (hFile == INVALID_HANDLE_VALUE)return;
+
+	
+	
+}
+
+
+
 //偽物(何か処理をしたらTRUE、何もしなかったらFALSEを返す)
 BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 {

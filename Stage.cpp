@@ -236,8 +236,15 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 	
 }
 
+
+
 void Stage::Save()
 {
+	string inData;//高さと種類を入れる文字列
+	inData += table_[][].HEIGHT; //高さ
+	inData += select_;
+
+
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
 
 	//「ファイルを保存」ダイアログの設定
@@ -273,7 +280,7 @@ void Stage::Save()
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
-		select_,          //保存したい文字列
+		inData,          //保存したい文字列
 		12,                  //保存する文字数
 		&bytes,             //保存したサイズ
 		NULL

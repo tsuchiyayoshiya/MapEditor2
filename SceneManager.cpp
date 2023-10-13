@@ -57,3 +57,4 @@ void SceneManager::ChangeScene(SCENE_ID _next)
 {
 	nextSceneID_ = _next;
 }
+

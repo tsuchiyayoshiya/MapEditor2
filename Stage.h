@@ -14,7 +14,7 @@ namespace {
 
 struct {
 	BLOCKTYPE type;
-	int HEGHT = 0;
+	int HEIGHT = 0;
 	float raydist;
 	bool IsRay;
 
@@ -51,8 +51,8 @@ public:
 	BOOL DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp);
 	void Table_Reset();
 	void SetBlock(int _x, int _z, BLOCKTYPE _type) { table_[_x][_z].type = _type; };
-	void SetBlockHeght(int _x, int _z, int _height) { table_[_x][_z].HEGHT = _height; };
-	void Save(void);
-	void Load(void);
+	void SetBlockHeight(int _x, int _z, int _height) { table_[_x][_z].HEIGHT = _height; };
+	void Save();
+	//void fLoad(void);
 
 };

@@ -4,6 +4,8 @@
 #include"Engine/Direct3D.h"
 #include"resource.h"
 #include"Engine/Fbx.h"
+
+//#include "DxLib.h"
 //コンストラクタ
 Stage::Stage(GameObject* parent)
 	: GameObject(parent, "Stage"), mode_(0), select_(0), menu_(0)
@@ -90,7 +92,7 @@ void Stage::Update()
 	{
 		for (int z = 0; z < ZSIZE; z++)
 		{
-			for (int y = 0; y < table_[x][z].HEGHT + 1; y++)
+			for (int y = 0; y < table_[x][z].HEIGHT + 1; y++)
 			{
 
 				//⑤　②から④に向かってレイを打つ
@@ -128,11 +130,11 @@ void Stage::Update()
 							switch (mode_)//地形の編集
 							{
 							case 0:
-								table_[x][z].HEGHT++;
+								table_[x][z].HEIGHT++;
 								break;
 							case 1:
-								if (table_[x][z].HEGHT > 0)
-									table_[x][z].HEGHT--;
+								if (table_[x][z].HEIGHT > 0)
+									table_[x][z].HEIGHT--;
 								break;
 							case 2:
 								switch (select_)//ブロックの種類
@@ -181,7 +183,7 @@ void Stage::Draw()
 	{
 		for (int z = 0; z < ZSIZE; z++)
 		{
-			for (int y = 0; y < table_[x][z].HEGHT + 1; y++)
+			for (int y = 0; y < table_[x][z].HEIGHT + 1; y++)
 			{
 				int type_ = table_[x][z].type;
 
@@ -231,20 +233,54 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 		select_ = (int)SendMessage(GetDlgItem(hDlg, IDC_COMBO2), CB_GETCURSEL, 0, 0);
 	}
 	return FALSE;
-	//LOWORD(wp)
+	
 }
 
-/*
-//メニュー用のプロしーじゃ
-BOOL CALLBACK DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
+void Stage::Save()
 {
-	switch (msg)
-	{
-		SendMessage(GetDlgItem(hDlg, ID_MENU_SAVE), CB_GETCURSEL, 情報A, 情報B)
-	}
-	return FALSE;
+	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
+
+	//「ファイルを保存」ダイアログの設定
+	OPENFILENAME ofn;                         	//名前をつけて保存ダイアログの設定用構造体
+	ZeroMemory(&ofn, sizeof(ofn));            	//構造体初期化
+	ofn.lStructSize = sizeof(OPENFILENAME);   	//構造体のサイズ
+	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")        //─┬ファイルの種類
+		TEXT("すべてのファイル(*.*)\0*.*\0\0");     //─┘
+	ofn.lpstrFile = fileName;               	//ファイル名
+	ofn.nMaxFile = MAX_PATH;               	//パスの最大文字数
+	ofn.Flags = OFN_OVERWRITEPROMPT;   		//フラグ（同名ファイルが存在したら上書き確認）
+	ofn.lpstrDefExt = "map";                  	//デフォルト拡張子
+
+	//「ファイルを保存」ダイアログ
+	BOOL selFile;
+	selFile = GetSaveFileName(&ofn);
+
+	//キャンセルしたら中断
+	if (selFile == FALSE) return;
+	HANDLE hFile;
+	hFile = CreateFile(
+		fileName,    //ファイル名
+		GENERIC_WRITE,  //アクセスモード
+		0,
+		NULL,
+		CREATE_ALWAYS,     //作成方法
+		FILE_ATTRIBUTE_NORMAL,
+		NULL
+	);
+
+	std::string data = "";
+	//data.length()
+	DWORD bytes = 0;
+	WriteFile(
+		hFile,              //ファイルハンドル
+		select_,          //保存したい文字列
+		12,                  //保存する文字数
+		&bytes,             //保存したサイズ
+		NULL
+	);
+	CloseHandle(hFile);
+
 }
-*/
 
 void Stage::Table_Reset()
 {
@@ -254,59 +290,11 @@ void Stage::Table_Reset()
 		for (int z = 0; z < ZSIZE; z++)
 		{
 			SetBlock(x, z, (BLOCKTYPE)(x % 5));
-			//table_[x][z].HEGHT = 1;
-			SetBlockHeght(x, z, 0);
+			//table_[x][z].HEIGHT = 1;
+			SetBlockHeight(x, z, 0);
 		}
 	}
 }
 
-void Stage::Save()
-{
-	char fileName[MAX_PATH] = "無題.map";
-
-	OPENFILENAME ofn;
-	ZeroMemory(&ofn, sizeof(ofn));
-	ofn.lStructSize = sizeof(OPENFILENAME);
-	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")
-		TEXT("すべてのファイル(*.*)\0*.*\0\0");
-	ofn.lpstrFile = fileName;
-	ofn.nMaxFile = MAX_PATH;
-	ofn.Flags = OFN_OVERWRITEPROMPT;
-	ofn.lpstrDefExt = "map";
-
-	//ファイルを保存　ダイアログ
-	BOOL selFile;
-	selFile = GetSaveFileName(&ofn);
-
-	//キャンセルしたら中断
-	if (selFile == FALSE) return;
 
 
-	/*
-	HANDLE hFile;        //ファイルのハンドル
-	hFile = CreateFile(
-		"dataFile.txt",                 //ファイル名
-		GENERIC_WRITE,           //アクセスモード（書き込み用）
-		0,                      //共有（なし）
-		NULL,                   //セキュリティ属性（継承しない）
-		CREATE_ALWAYS,           //作成方法
-		FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
-		NULL);                  //拡張属性（なし）
-	//失敗したとき
-	if (hFile == INVALID_HANDLE_VALUE)return;
-	
-	string writestr;
-	writestr = ;
-
-	DWORD dwBytes = 0;  //書き込み位置
-	WriteFile(
-		hFile,                   //ファイルハンドル
-		writestr,                  //保存するデータ（文字列）
-		(DWORD)strlen(writestr),   //書き込む文字数
-		&dwBytes,                //書き込んだサイズを入れる変数
-		NULL);                   //オーバーラップド構造体（今回は使わない）
-
-
-	CloseHandle(hFile);
-	*/
-}

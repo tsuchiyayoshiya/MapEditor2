@@ -4,6 +4,7 @@
 #include"Engine/Direct3D.h"
 #include"resource.h"
 #include"Engine/Fbx.h"
+//using namespace XMINT2;
 
 //#include "DxLib.h"
 //コンストラクタ
@@ -197,7 +198,6 @@ void Stage::Draw()
 
 		}
 	}
-
 }
 
 //開放
@@ -240,9 +240,7 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 void Stage::Save()
 {
-	string inData;//高さと種類を入れる文字列
-	inData += table_[][].HEIGHT; //高さ
-	inData += select_;
+	
 
 
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
@@ -275,13 +273,17 @@ void Stage::Save()
 		NULL
 	);
 
-	std::string data = "";
+	string inData;//高さと種類を入れる文字列
+	inData += XSIZE; //高さ
+	inData += select_; //種類
+	
+	//std::string data = "";
 	//data.length()
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
-		inData,          //保存したい文字列
-		12,                  //保存する文字数
+		inData.c_str(),            //保存したい文字列　"ABCDEF"
+		(DWORD)strlen(inData.c_str()),                  //保存する文字数
 		&bytes,             //保存したサイズ
 		NULL
 	);

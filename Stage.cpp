@@ -261,7 +261,7 @@ void Stage::Save()
 	//「ファイルを保存」ダイアログ
 	BOOL selFile;
 	selFile = GetSaveFileName(&ofn);
-
+	//aaaaaaa
 	//キャンセルしたら中断
 	if (selFile == FALSE) return;
 	HANDLE hFile;

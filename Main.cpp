@@ -213,7 +213,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			a++;
 			break;
 		case ID_MENU_OPEN:
-			a++;
+			((Stage*)pRootJob->FindObject("Stage"))->Save();
 			break;
 		case ID_MENU_SAVE:
 			((Stage*)pRootJob->FindObject("Stage"))->Save();

@@ -256,9 +256,14 @@ void Stage::Save()
 	ofn.Flags = OFN_OVERWRITEPROMPT;   		//フラグ（同名ファイルが存在したら上書き確認）
 	ofn.lpstrDefExt = "map";                  	//デフォルト拡張子
 
+	
+
 	//「ファイルを保存」ダイアログ
 	BOOL selFile;
 	selFile = GetSaveFileName(&ofn);
+
+	
+
 
 	//キャンセルしたら中断
 	if (selFile == FALSE) return;
@@ -289,8 +294,53 @@ void Stage::Save()
 	);
 	CloseHandle(hFile);
 
+	HANDLE hFile = CreateFile(
+		fileName,                 //ファイル名
+		GENERIC_READ,           //アクセスモード（書き込み用）
+		0,                      //共有（なし）
+		NULL,                   //セキュリティ属性（継承しない）
+		OPEN_EXISTING,           //作成方法
+		FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
+		NULL);                  //拡張属性（なし）
+
+	char* data;
+
+	BOOL res = ReadFile(
+		hFile,     //ファイルハンドル
+		data,      //データを入れる変数
+		0,  //読み込むサイズ
+		0,  //読み込んだサイズ
+		NULL);     //オーバーラップド構造体（今回は使わない）
+
+	//ファイルを開くダイアログ
+	BOOL opnFile;
+	opnFile = GetOpenFileName(&ofn);
+
+	CloseHandle(hFile);
 }
 
+
+/*
+void Stage::Open()
+{
+	
+
+	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
+	
+	
+	//HANDLE res = hFile;
+	
+	//dwBytes = 0; //読み込み位置
+
+	
+
+	//ファイルを開くダイアログ
+	BOOL opnFile;
+	opnFile = GetOpenFileName(&res);
+
+	CloseHandle(hFile);
+}
+*/
 void Stage::Table_Reset()
 {
 	//テーブルを初期化

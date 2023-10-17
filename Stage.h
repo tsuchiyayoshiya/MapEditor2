@@ -53,6 +53,7 @@ public:
 	void SetBlock(int _x, int _z, BLOCKTYPE _type) { table_[_x][_z].type = _type; };
 	void SetBlockHeight(int _x, int _z, int _height) { table_[_x][_z].HEIGHT = _height; };
 	void Save();
+	void Open();
 	//void fLoad(void);
 
 };

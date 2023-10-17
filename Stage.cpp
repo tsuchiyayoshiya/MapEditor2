@@ -240,8 +240,8 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 void Stage::Save()
 {
-	string inData;//高さと種類を入れる文字列
-	inData += table_[][].HEIGHT; //高さ
+	char inData = 0;//高さと種類を入れる文字列
+	//inData += table_[15][15].HEIGHT; //高さ
 	inData += select_;
 
 
@@ -275,12 +275,12 @@ void Stage::Save()
 		NULL
 	);
 
-	std::string data = "";
+	string data = "";
 	//data.length()
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
-		inData,          //保存したい文字列
+		"DEF",          //保存したい文字列
 		12,                  //保存する文字数
 		&bytes,             //保存したサイズ
 		NULL

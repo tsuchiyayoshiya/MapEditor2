@@ -163,7 +163,7 @@ void Stage::Update()
 								break;
 							}
 						}
-				
+
 					}
 					return;
 				}
@@ -172,9 +172,9 @@ void Stage::Update()
 			}
 		}
 	}
-	
-	
-	
+
+
+
 }
 
 //描画
@@ -233,14 +233,14 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 		select_ = (int)SendMessage(GetDlgItem(hDlg, IDC_COMBO2), CB_GETCURSEL, 0, 0);
 	}
 	return FALSE;
-	
+
 }
 
 
 
 void Stage::Save()
 {
-	
+
 
 
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
@@ -256,13 +256,13 @@ void Stage::Save()
 	ofn.Flags = OFN_OVERWRITEPROMPT;   		//フラグ（同名ファイルが存在したら上書き確認）
 	ofn.lpstrDefExt = "map";                  	//デフォルト拡張子
 
-	
+
 
 	//「ファイルを保存」ダイアログ
 	BOOL selFile;
 	selFile = GetSaveFileName(&ofn);
 
-	
+
 
 
 	//キャンセルしたら中断
@@ -281,7 +281,7 @@ void Stage::Save()
 	string inData;//高さと種類を入れる文字列
 	inData += XSIZE; //高さ
 	inData += select_; //種類
-	
+
 	//std::string data = "";
 	//data.length()
 	DWORD bytes = 0;
@@ -293,7 +293,7 @@ void Stage::Save()
 		NULL
 	);
 	CloseHandle(hFile);
-	  = CreateFile(
+	= CreateFile(
 		fileName,                 //ファイル名
 		GENERIC_READ,           //アクセスモード（書き込み用）
 		0,                      //共有（なし）
@@ -324,16 +324,16 @@ void Stage::Save()
 /*
 void Stage::Open()
 {
-	
+
 
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
-	
-	
+
+
 	//HANDLE res = hFile;
-	
+
 	//dwBytes = 0; //読み込み位置
 
-	
+
 
 	//ファイルを開くダイアログ
 	BOOL opnFile;

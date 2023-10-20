@@ -293,8 +293,7 @@ void Stage::Save()
 		NULL
 	);
 	CloseHandle(hFile);
-
-	HANDLE hFile = CreateFile(
+	  = CreateFile(
 		fileName,                 //ファイル名
 		GENERIC_READ,           //アクセスモード（書き込み用）
 		0,                      //共有（なし）
@@ -303,13 +302,15 @@ void Stage::Save()
 		FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
 		NULL);                  //拡張属性（なし）
 
-	char* data;
+	DWORD fileSize = GetFileSize(hFile, NULL);
 
+	char* data;
+	data = new char[fileSize];
 	BOOL res = ReadFile(
 		hFile,     //ファイルハンドル
 		data,      //データを入れる変数
-		0,  //読み込むサイズ
-		0,  //読み込んだサイズ
+		fileSize,  //読み込むサイズ
+		&bytes,  //読み込んだサイズ
 		NULL);     //オーバーラップド構造体（今回は使わない）
 
 	//ファイルを開くダイアログ

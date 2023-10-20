@@ -287,7 +287,7 @@ void Stage::Save()
 		NULL
 	);
 	CloseHandle(hFile);
-	= CreateFile(
+	BOOL selFile = CreateFile(
 		fileName,                 //ファイル名
 		GENERIC_READ,           //アクセスモード（書き込み用）
 		0,                      //共有（なし）
@@ -314,28 +314,6 @@ void Stage::Save()
 	CloseHandle(hFile);
 }
 
-
-/*
-void Stage::Open()
-{
-
-
-	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
-
-
-	//HANDLE res = hFile;
-
-	//dwBytes = 0; //読み込み位置
-
-
-
-	//ファイルを開くダイアログ
-	BOOL opnFile;
-	opnFile = GetOpenFileName(&res);
-
-	CloseHandle(hFile);
-}
-*/
 void Stage::Table_Reset()
 {
 	//テーブルを初期化

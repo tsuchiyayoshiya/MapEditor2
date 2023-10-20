@@ -244,8 +244,6 @@ void Stage::Save()
 	//inData += table_[15][15].HEIGHT; //高さ
 	inData += select_;
 
-
-
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
 
 	//「ファイルを保存」ダイアログの設定

@@ -240,6 +240,9 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 void Stage::Save()
 {
+	char inData = 0;//高さと種類を入れる文字列
+	//inData += table_[15][15].HEIGHT; //高さ
+	inData += select_;
 
 
 
@@ -261,10 +264,7 @@ void Stage::Save()
 	//「ファイルを保存」ダイアログ
 	BOOL selFile;
 	selFile = GetSaveFileName(&ofn);
-
-
-
-
+	//aaaaaaa
 	//キャンセルしたら中断
 	if (selFile == FALSE) return;
 	HANDLE hFile;
@@ -278,17 +278,13 @@ void Stage::Save()
 		NULL
 	);
 
-	string inData;//高さと種類を入れる文字列
-	inData += XSIZE; //高さ
-	inData += select_; //種類
-
-	//std::string data = "";
+	string data = "";
 	//data.length()
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
-		inData.c_str(),            //保存したい文字列　"ABCDEF"
-		(DWORD)strlen(inData.c_str()),                  //保存する文字数
+		"ABCEFG",          //保存したい文字列
+		12,                  //保存する文字数
 		&bytes,             //保存したサイズ
 		NULL
 	);

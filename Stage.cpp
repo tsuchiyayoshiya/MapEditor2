@@ -240,10 +240,6 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 void Stage::Save()
 {
-	char inData = 0;//高さと種類を入れる文字列
-	//inData += table_[15][15].HEIGHT; //高さ
-	inData += select_;
-
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
 
 	//「ファイルを保存」ダイアログの設定
@@ -251,20 +247,19 @@ void Stage::Save()
 	ZeroMemory(&ofn, sizeof(ofn));            	//構造体初期化
 	ofn.lStructSize = sizeof(OPENFILENAME);   	//構造体のサイズ
 	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")        //─┬ファイルの種類
-		TEXT("すべてのファイル(*.*)\0*.*\0\0");     //─┘
+		TEXT("すべてのファイル(*.*)\0*.*\0\0");     //
 	ofn.lpstrFile = fileName;               	//ファイル名
 	ofn.nMaxFile = MAX_PATH;               	//パスの最大文字数
 	ofn.Flags = OFN_OVERWRITEPROMPT;   		//フラグ（同名ファイルが存在したら上書き確認）
 	ofn.lpstrDefExt = "map";                  	//デフォルト拡張子
 
-
-
 	//「ファイルを保存」ダイアログ
 	BOOL selFile;
 	selFile = GetSaveFileName(&ofn);
-	//aaaaaaa
+
 	//キャンセルしたら中断
 	if (selFile == FALSE) return;
+
 	HANDLE hFile;
 	hFile = CreateFile(
 		fileName,    //ファイル名
@@ -275,41 +270,16 @@ void Stage::Save()
 		FILE_ATTRIBUTE_NORMAL,
 		NULL
 	);
-
-	string data = "";
+	std::string data = "";
 	//data.length()
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
-		"ABCEFG",          //保存したい文字列
+		"ABCDEF",          //保存したい文字列
 		12,                  //保存する文字数
 		&bytes,             //保存したサイズ
 		NULL
 	);
-	CloseHandle(hFile);
-	BOOL selFile = CreateFile(
-		fileName,                 //ファイル名
-		GENERIC_READ,           //アクセスモード（書き込み用）
-		0,                      //共有（なし）
-		NULL,                   //セキュリティ属性（継承しない）
-		OPEN_EXISTING,           //作成方法
-		FILE_ATTRIBUTE_NORMAL,  //属性とフラグ（設定なし）
-		NULL);                  //拡張属性（なし）
-
-	DWORD fileSize = GetFileSize(hFile, NULL);
-
-	char* data;
-	data = new char[fileSize];
-	BOOL res = ReadFile(
-		hFile,     //ファイルハンドル
-		data,      //データを入れる変数
-		fileSize,  //読み込むサイズ
-		&bytes,  //読み込んだサイズ
-		NULL);     //オーバーラップド構造体（今回は使わない）
-
-	//ファイルを開くダイアログ
-	BOOL opnFile;
-	opnFile = GetOpenFileName(&ofn);
 
 	CloseHandle(hFile);
 }

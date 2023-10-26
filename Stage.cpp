@@ -4,6 +4,7 @@
 #include"Engine/Direct3D.h"
 #include"resource.h"
 #include"Engine/Fbx.h"
+#include<vector>
 //using namespace XMINT2;
 
 //#include "DxLib.h"
@@ -240,6 +241,8 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 void Stage::Save()
 {
+	
+
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
 
 	//「ファイルを保存」ダイアログの設定
@@ -270,12 +273,12 @@ void Stage::Save()
 		FILE_ATTRIBUTE_NORMAL,
 		NULL
 	);
-	std::string data = "";
-	//data.length()
+	string data = "";
+	//data.length();
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
-		"ABCDEF",          //保存したい文字列
+        "aaaa",          //保存したい文字列
 		12,                  //保存する文字数
 		&bytes,             //保存したサイズ
 		NULL
@@ -292,7 +295,6 @@ void Stage::Table_Reset()
 		for (int z = 0; z < ZSIZE; z++)
 		{
 			SetBlock(x, z, (BLOCKTYPE)(x % 5));
-			//table_[x][z].HEIGHT = 1;
 			SetBlockHeight(x, z, 0);
 		}
 	}

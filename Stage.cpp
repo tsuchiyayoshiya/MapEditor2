@@ -242,7 +242,7 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 void Stage::Save()
 {
 	
-
+	
 	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
 
 	//「ファイルを保存」ダイアログの設定
@@ -273,13 +273,23 @@ void Stage::Save()
 		FILE_ATTRIBUTE_NORMAL,
 		NULL
 	);
-	string data = "";
+
+	//マップの情報
+	for (int x = 0; x < XSIZE; x++)
+	{
+		for (int z = 0; z < ZSIZE; z++)
+		{
+			int data = table_[x][z].HEIGHT;
+			     
+		}
+	}
+
 	//data.length();
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
-        "aaaa",          //保存したい文字列
-		12,                  //保存する文字数
+        data.c_str(),          //保存したい文字列
+		(DWORD)strlen(data.c_str()),                  //保存する文字数
 		&bytes,             //保存したサイズ
 		NULL
 	);

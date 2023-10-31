@@ -279,19 +279,18 @@ void Stage::Save()
 	{
 		for (int z = 0; z < ZSIZE; z++)
 		{
-			int data = table_[x][z].HEIGHT;
-			     
+			char data = table_[x][z].HEIGHT;	     
 		}
 	}
 
-	//data.length();
+	
 	DWORD bytes = 0;
 	WriteFile(
 		hFile,              //ファイルハンドル
         data.c_str(),          //保存したい文字列
 		(DWORD)strlen(data.c_str()),                  //保存する文字数
 		&bytes,             //保存したサイズ
-		NULL
+		NULL             
 	);
 
 	CloseHandle(hFile);

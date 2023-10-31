@@ -279,7 +279,7 @@ void Stage::Save()
 	{
 		for (int z = 0; z < ZSIZE; z++)
 		{
-			char data = table_[x][z].HEIGHT;	     
+			table_[x][z].HEIGHT;	     
 		}
 	}
 

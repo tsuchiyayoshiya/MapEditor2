@@ -88,9 +88,6 @@ void Stage::Update()
 	//④　③にinvVP、invProj、invViewをかける
 	vMousePosB = XMVector3TransformCoord(vMousePosB, invVP * invProj * invView);
 
-
-
-
 	for (int x = 0; x < XSIZE; x++)
 	{
 		for (int z = 0; z < ZSIZE; z++)
@@ -174,9 +171,6 @@ void Stage::Update()
 			}
 		}
 	}
-
-
-
 }
 
 //描画
@@ -207,10 +201,6 @@ void Stage::Release()
 {
 }
 
-
-
-
-
 //偽物(何か処理をしたらTRUE、何もしなかったらFALSEを返す)
 BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 {
@@ -235,10 +225,7 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 		select_ = (int)SendMessage(GetDlgItem(hDlg, IDC_COMBO2), CB_GETCURSEL, 0, 0);
 	}
 	return FALSE;
-
 }
-
-
 
 void Stage::Save()
 {
@@ -285,6 +272,7 @@ void Stage::Save()
 		NULL);                   //オーバーラップド構造体（今回は使わない）
 	CloseHandle(hFile);
 }
+
 void Stage::Open()
 {
 	char fileName[MAX_PATH] = "無題.map";
@@ -349,6 +337,7 @@ void Stage::Open()
 		}
 	}
 }
+
 void Stage::Table_Reset()
 {
 	//テーブルを初期化

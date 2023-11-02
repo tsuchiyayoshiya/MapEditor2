@@ -5,12 +5,13 @@
 #include"resource.h"
 #include"Engine/Fbx.h"
 #include<vector>
+#include<string>
 //using namespace XMINT2;
 
 //#include "DxLib.h"
 //コンストラクタ
 Stage::Stage(GameObject* parent)
-	: GameObject(parent, "Stage"), mode_(0), select_(0), menu_(0)
+	: GameObject(parent, "Stage"), mode_(0), select_(0)
 {
 	for (int i = 0; i < MODEL_NUM; i++)
 	{
@@ -241,59 +242,113 @@ BOOL Stage::DialogProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 
 void Stage::Save()
 {
-	char fileName[MAX_PATH] = "無題.map";  //ファイル名を入れる変数
-
+	char fileName[MAX_PATH] = "無題.map";//ファイル名を入れる変数
 	//「ファイルを保存」ダイアログの設定
-	OPENFILENAME ofn;                         	//名前をつけて保存ダイアログの設定用構造体
-	ZeroMemory(&ofn, sizeof(ofn));            	//構造体初期化
-	ofn.lStructSize = sizeof(OPENFILENAME);   	//構造体のサイズ
-	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")        //─┬ファイルの種類
-		TEXT("すべてのファイル(*.*)\0*.*\0\0");     //
-	ofn.lpstrFile = fileName;               	//ファイル名
-	ofn.nMaxFile = MAX_PATH;               	//パスの最大文字数
-	ofn.Flags = OFN_OVERWRITEPROMPT;   		//フラグ（同名ファイルが存在したら上書き確認）
-	ofn.lpstrDefExt = "map";                  	//デフォルト拡張子
-
+	OPENFILENAME ofn;//名前を付けて保存ダイアログの設定用構造
+	ZeroMemory(&ofn, sizeof(ofn));//構造体初期化
+	ofn.lStructSize = sizeof(OPENFILENAME);//構造体のサイズ
+	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")//ファイルの種類
+		TEXT("すべてのファイル(*.*)\0*.*\0\0");
+	ofn.lpstrFile = fileName;//ファイル名
+	ofn.nMaxFile = MAX_PATH;//パスの最大文字数
+	ofn.Flags = OFN_OVERWRITEPROMPT;//フラグ(同名ファイルが存在したら上書き確認)
+	ofn.lpstrDefExt = "map";//デフォルト拡張子
 	//「ファイルを保存」ダイアログ
 	BOOL selFile;
 	selFile = GetSaveFileName(&ofn);
-
 	//キャンセルしたら中断
 	if (selFile == FALSE) return;
-
+	setlocale(LC_ALL, "Japanese");
 	HANDLE hFile;
 	hFile = CreateFile(
-		fileName,    //ファイル名
-		GENERIC_WRITE,  //アクセスモード
-		0,
-		NULL,
-		CREATE_ALWAYS,     //作成方法
-		FILE_ATTRIBUTE_NORMAL,
-		NULL
-	);
-
-	//マップの情報
+		fileName,     //ファイル名
+		GENERIC_WRITE,//アクセスモード（書き込み用）
+		0,            //共有（なし）
+		NULL,         //セキュリティ属性（継承しない）
+		CREATE_ALWAYS,//作成方法
+		FILE_ATTRIBUTE_NORMAL,//属性とフラグ（設定なし）
+		NULL);        //拡張属性（なし）
 	for (int x = 0; x < XSIZE; x++)
 	{
 		for (int z = 0; z < ZSIZE; z++)
 		{
-			table_[x][z].HEIGHT;	     
+			data_ = data_ + std::to_string(table_[x][z].HEIGHT)
+				+ std::to_string(table_[x][z].type);
 		}
 	}
-
-	
-	DWORD bytes = 0;
+	DWORD dwBytes = 0;  //書き込み位置
 	WriteFile(
-		hFile,              //ファイルハンドル
-        data.c_str(),          //保存したい文字列
-		(DWORD)strlen(data.c_str()),                  //保存する文字数
-		&bytes,             //保存したサイズ
-		NULL             
-	);
-
+		hFile,                   //ファイルハンドル
+		data_.c_str(),                  //保存するデータ（文字列）
+		(DWORD)strlen(data_.c_str()),   //書き込む文字数
+		&dwBytes,                //書き込んだサイズを入れる変数
+		NULL);                   //オーバーラップド構造体（今回は使わない）
 	CloseHandle(hFile);
 }
-
+void Stage::Open()
+{
+	char fileName[MAX_PATH] = "無題.map";
+	//「ファイルを保存」ダイアログの設定
+	OPENFILENAME ofn;                         //名前をつけて保存ダイアログの設定用構造体
+	ZeroMemory(&ofn, sizeof(ofn));             //構造体初期化
+	ofn.lStructSize = sizeof(OPENFILENAME);   //構造体のサイズ
+	ofn.lpstrFilter = TEXT("マップデータ(*.map)\0*.map\0")        //─┬ファイルの種類
+		TEXT("すべてのファイル(*.*)\0*.*\0\0");     //─┘
+	ofn.lpstrFile = fileName;               //ファイル名
+	ofn.nMaxFile = MAX_PATH;               //パスの最大文字数
+	ofn.Flags = OFN_FILEMUSTEXIST;   //フラグ（同名ファイルが存在したら上書き確認）
+	ofn.lpstrDefExt = "map";                   //デフォルト拡張子
+	//「ファイルを保存」ダイアログ
+	BOOL selFile;
+	selFile = GetOpenFileName(&ofn);
+	//キャンセルしたら中断
+	if (selFile == FALSE) return;
+	HANDLE hFile;
+	hFile = CreateFile(
+		fileName,     //ファイル名
+		GENERIC_READ,//アクセスモード（読み込み用）
+		0,            //共有（なし）
+		NULL,         //セキュリティ属性（継承しない）
+		OPEN_EXISTING,//作成方法
+		FILE_ATTRIBUTE_NORMAL,//属性とフラグ（設定なし）
+		NULL);        //拡張属性（なし）
+	//ファイルのサイズを取得
+	DWORD fileSize = GetFileSize(hFile, NULL);
+	//ファイルのサイズ分メモリを確保
+	char* data;
+	data = new char[fileSize];
+	DWORD dwBytes = 0; //読み込み位置
+	ReadFile(
+		hFile,     //ファイルハンドル
+		data,      //データを入れる変数
+		fileSize,  //読み込むサイズ
+		&dwBytes,  //読み込んだサイズ
+		NULL);     //オーバーラップド構造体（今回は使わない）
+	CloseHandle(hFile);
+	for (int i = 0; i < sizeof(data) / sizeof(char); i++)
+	{
+		if (i % 2 == 0)
+		{
+			for (int x = 0; x < XSIZE; x++)
+			{
+				for (int z = 0; z < ZSIZE; z++)
+				{
+					table_[x][z].HEIGHT = data[i];
+				}
+			}
+		}
+		if (i % 2 == 1)
+		{
+			for (int x = 0; x < XSIZE; x++)
+			{
+				for (int z = 0; z < ZSIZE; z++)
+				{
+					SetBlock(x, z, (BLOCKTYPE)(data[i]));
+				}
+			}
+		}
+	}
+}
 void Stage::Table_Reset()
 {
 	//テーブルを初期化
